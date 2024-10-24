@@ -1,0 +1,61 @@
+# Node_modules directory
+node_modules/
+
+# Environment variables file
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Docker specifics
+**/data/
+**/*.pid
+docker-compose.override.yml
+docker-compose-*.yml
+
+# npm package
+*.tgz
+
+# Coverage files
+coverage/
+.nyc_output/
+
+# Build directories
+dist/
+build/
+
+# Temp files
+temp/
+tmp/
+*.tmp
+
+# Miscellaneous
+*.bak
+
+# Ignore lock files (optional)
+# yarn.lock
+# package-lock.json
+
+# Visual Studio Code settings
+.vscode/
+
+# Ignore certs directory
+certs/

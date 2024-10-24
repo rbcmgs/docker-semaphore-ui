@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: "${POSTGRES_CONTAINER}"
+    restart: "${POSTGRES_RESTART}"
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DATABASE}"
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./start-postgres.sh:/docker-entrypoint-initdb.d/start-postgres.sh
+      - ./certs:/docker-entrypoint-initdb.d/certs
+    networks:
+      - semaphore_net
+
+  semaphore-ui:
+    build: .
+    container_name: "${SEMAPHORE_CONTAINER}"
+    restart: "${SEMAPHORE_RESTART}"
+    depends_on:
+      - postgres
+    environment:
+      SEMAPHORE_DB_USER: "${POSTGRES_USER}"
+      SEMAPHORE_DB_PASS: "${POSTGRES_PASSWORD}"
+      SEMAPHORE_DB_HOST: "${SEMAPHORE_DB_HOST}"
+      SEMAPHORE_DB_PORT: "${SEMAPHORE_DB_PORT}"
+      SEMAPHORE_DB_NAME: "${SEMAPHORE_DB_NAME}"
+      SEMAPHORE_PLAYBOOK_PATH: "${SEMAPHORE_PLAYBOOK_PATH}"
+      SEMAPHORE_ADMIN_PASSWORD: "${SEMAPHORE_ADMIN_PASSWORD}"
+      SEMAPHORE_ADMIN: "${SEMAPHORE_ADMIN}"
+      SEMAPHORE_ADMIN_NAME: "${SEMAPHORE_ADMIN_NAME}"
+      SEMAPHORE_ADMIN_EMAIL: "${SEMAPHORE_ADMIN_EMAIL}"
+      SEMAPHORE_ACCESS_KEY_ENCRYPTION: "${SEMAPHORE_ACCESS_KEY_ENCRYPTION}"
+      SEMAPHORE_COOKIE_HASH: "${SEMAPHORE_COOKIE_HASH}"
+      SEMAPHORE_COOKIE_ENCRYPTION: "${SEMAPHORE_COOKIE_ENCRYPTION}"
+      TZ: "${SEMAPHORE_TZ}"
+    ports:
+      - "${SEMAPHORE_PORT}:${SEMAPHORE_PORT}"
+    networks:
+      - semaphore_net
+
+  nginx:
+    build: ./nginx
+    container_name: semaphore_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SEMAPHORE_CONTAINER: "${SEMAPHORE_CONTAINER}"
+      SEMAPHORE_PORT: "${SEMAPHORE_PORT}"
+    networks:
+      - semaphore_net
+
+volumes:
+  postgres_data:
+
+networks:
+  semaphore_net:
+    driver: bridge
