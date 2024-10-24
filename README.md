@@ -93,4 +93,4 @@ This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participatin
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) file for details.
